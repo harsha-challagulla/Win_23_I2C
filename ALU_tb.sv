@@ -6,16 +6,16 @@ module top1;
   logic Cin;
   
   // Outputs
-  logic [7:0] Sum;
-  logic [2:0] Cout;
+  logic [7:0] Sum1;
+  logic [7:0] Sum2;
   
   // Instantiate the DUT (Design Under Test)
   ALU dut (
     .A(A),
     .B(B),
     .Cin(Cin),
-    .Sum(Sum),
-    .Cout(Cout)
+    .Sum1(Sum1),
+    .Sum2(Sum2)
   );
   
   // Testbench stimulus
@@ -29,10 +29,10 @@ module top1;
     #10; // Wait for 10 time units
     
     // Check the expected results
-    if (Sum !== 8'd41 || Cout !== 0) begin
-      $display("Test case 1 failed! Sum: %b, Cout: %b", Sum, Cout);
+    if (Sum1 !== 8'd41 || Sum2 !== 0) begin
+      $display("Test case 1 failed! Sum1: %b, Sum2: %b", Sum1, Sum2);
     end else begin
-      $display("Test case 1 passed! A = %d, B = %d, Cin = %d, Sum = %d, Cout = %d", A,B,Cin,Sum,Cout);
+      $display("Test case 1 passed! A = %d, B = %d, Cin = %d, Sum1 = %d, Sum2 = %d", A,B,Cin,Sum1,Sum2);
     end
     
     // Test case 2: A = 255, B = 0, Cin = 1
@@ -42,10 +42,10 @@ module top1;
     #10; // Wait for 10 time units
     
     // Check the expected results
-    if ({Cout,Sum} !== 9'd511) begin
-      $display("Test case 2 failed! Sum: %d, Cout: %d", Sum, Cout);
+    if ({Sum2,Sum1} !== 9'd511) begin
+      $display("Test case 2 failed! Sum1: %d, Sum2: %d", Sum1, Sum2);
     end else begin
-      $display("Test case 2 passed! A = %d, B = %d, Cin = %d, Sum = %d, Cout = %d", A,B,Cin,{Cout,Sum},Cout);
+      $display("Test case 2 passed! A = %d, B = %d, Cin = %d, Sum1 = %d, Sum2 = %d", A,B,Cin,{Sum2,Sum1},Sum2);
     end
     
     A = 8'd255;
@@ -54,10 +54,10 @@ module top1;
     #10; // Wait for 10 time units
     
     // Check the expected results
-    if ({Cout,Sum} !== 11'd1530) begin
-      $display("Test case 3 failed! Sum: %d, Cout: %d", Sum, Cout);
+    if ({Sum2,Sum1} !== 11'd1530) begin
+      $display("Test case 3 failed! Sum1: %d, Sum2: %d", Sum1, Sum2);
     end else begin
-      $display("Test case 3 passed! A = %d, B = %d, Cin = %d, Sum = %d, Cout = %d", A,B,Cin,{Cout,Sum},Cout);
+      $display("Test case 3 passed! A = %d, B = %d, Cin = %d, Sum1 = %d, Sum2 = %d", A,B,Cin,{Sum2,Sum1},Sum2);
     end
 
 
@@ -67,10 +67,10 @@ module top1;
     #10; // Wait for 10 time units
     
     // Check the expected results
-    if ({Cout,Sum} !== 11'd1531) begin
-      $display("Test case 4 failed! Sum: %d, Cout: %d", Sum, Cout);
+    if ({Sum2,Sum1} !== 11'd1531) begin
+      $display("Test case 4 failed! Sum1: %d, Sum2: %d", Sum1, Sum2);
     end else begin
-      $display("Test case 4 passed! A = %d, B = %d, Cin = %d, Sum = %d, Cout = %d", A,B,Cin,{Cout,Sum},Cout);
+      $display("Test case 4 passed! A = %d, B = %d, Cin = %d, Sum1 = %d, Sum2 = %d", A,B,Cin,{Sum2,Sum1},Sum2);
     end
 
     A = 8'd0;
@@ -79,10 +79,10 @@ module top1;
     #10; // Wait for 10 time units
     
     // Check the expected results
-    if ({Cout,Sum} !== 9'd0) begin
-      $display("Test case 5 failed! Sum: %d, Cout: %d", Sum, Cout);
+    if ({Sum2,Sum1} !== 9'd0) begin
+      $display("Test case 5 failed! Sum1: %d, Sum2: %d", Sum1, Sum2);
     end else begin
-      $display("Test case 5 passed! A = %d, B = %d, Cin = %d, Sum = %d, Cout = %d", A,B,Cin,{Cout,Sum},Cout);
+      $display("Test case 5 passed! A = %d, B = %d, Cin = %d, Sum1 = %d, Sum2 = %d", A,B,Cin,{Sum2,Sum1},Sum2);
     end
 
     A = 8'd0;
@@ -91,10 +91,10 @@ module top1;
     #10; // Wait for 10 time units
     
     // Check the expected results
-    if ({Cout,Sum} !== 9'd1) begin
-      $display("Test case 6 failed! Sum: %d, Cout: %d", Sum, Cout);
+    if ({Sum2,Sum1} !== 9'd1) begin
+      $display("Test case 6 failed! Sum1: %d, Sum2: %d", Sum1, Sum2);
     end else begin
-      $display("Test case 6 passed! A = %d, B = %d, Cin = %d, Sum = %d, Cout = %d", A,B,Cin,{Cout,Sum},Cout);
+      $display("Test case 6 passed! A = %d, B = %d, Cin = %d, Sum1 = %d, Sum2 = %d", A,B,Cin,{Sum2,Sum1},Sum2);
     end
 
     A = 8'd0;
@@ -103,10 +103,10 @@ module top1;
     #10; // Wait for 10 time units
     
     // Check the expected results
-    if ({Cout,Sum} !== 10'd1020) begin
-      $display("Test case 7 failed! Sum: %d, Cout: %d", Sum, Cout);
+    if ({Sum2,Sum1} !== 10'd1020) begin
+      $display("Test case 7 failed! Sum1: %d, Sum2: %d", Sum1, Sum2);
     end else begin
-      $display("Test case 7 passed! A = %d, B = %d, Cin = %d, Sum = %d, Cout = %d", A,B,Cin,{Cout,Sum},Cout);
+      $display("Test case 7 passed! A = %d, B = %d, Cin = %d, Sum1 = %d, Sum2 = %d", A,B,Cin,{Sum2,Sum1},Sum2);
     end
 
 

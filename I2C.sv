@@ -17,7 +17,7 @@ module I2C_Controller(
     parameter CLOCK_WIDTH = 10/2;
     parameter IDLE_CLOCKS = 2;
     bit NACK, ACKT, ACKM, read;
-    bit SAFW_Done;
+    bit SAFW_Done, SDF_Done, LAD_Sel, SAFR_Done;
     int count_w, count_r;
     logic SDAreg;
 
@@ -78,7 +78,7 @@ module I2C_Controller(
             State[SAFWACK_B]:   if(NACK)                    Next = SAFW;
                                 else if(ACKT)               Next = SDF;
 
-            State[SDF_B]:                                   Next = SDFACK;
+            State[SDF_B]:       if(SDF_Done)                Next = SDFACK;
 
             State[SDFACK_B]:    if(NACK)                    Next = SDF;
                                 else if(ACKT & R_W_en)      Next = START;       // make read = 1
@@ -87,7 +87,7 @@ module I2C_Controller(
             State[LAD_B]:       if(count_w == 0)            Next = STOP;
                                 else if(count_w != 0)       Next = SDF;
 
-            State[SAFR_B]:                                  Next = SAFRACK;
+            State[SAFR_B]:      if(SAFR_Done)               Next = SAFRACK;
             
             State[SAFRACK_B]:   if(NACK)                    Next = SAFR;
                                 else if(ACKT)               Next = RDF;
@@ -115,6 +115,7 @@ module I2C_Controller(
                                 NACK = 0;
                                 ACKT = 0;
                                 ACKM = 0;
+                                // Rd  = 0;
                             end
 
             State[START_B]: begin   // 2
@@ -125,23 +126,27 @@ module I2C_Controller(
                             end
 
             State[SAFW_B]:  begin   // 4
+                                // if(R_W_en & Rd) read = 1;
                                 V1 = {Slave_Addr, read};
                                 S1 = 3'd7;
+                                if(~R_W_en)     count_w = 3;
+                                else if(R_W_en) count_w = 1;
                                 // SDAreg = Y1;
                                 // SCL = ~SCL;
                                 // @(negedge clk) SCL = ~SCL;
                                 repeat (8)  begin
-                                            @(posedge clk)  SDAreg = Y1;
-                                                            SCL = ~SCL;
+                                            @(posedge clk)  SCL = ~SCL;
+                                                            SDAreg = Y1;
                                             @(negedge clk)  SCL = ~SCL;
                                                             S1--;
                                 end
                                 @(posedge clk)
                                 SDAreg = '1;
-                                SAFW_Done = 1;
+                                SAFW_Done = 1;      // Used to indicate the State completion
                             end
 
             State[SAFWACK_B]:   begin   // 8
+                                    SAFW_Done = 0;
                                     SCL = ~SCL;
                                     if (~SDA) begin
                                         ACKT = 1;
@@ -153,39 +158,87 @@ module I2C_Controller(
                                     end
                                 end
 
-            State[SDF_B]: begin
-                
+            State[SDF_B]: begin // 16
+                            // Rd = 0;
+                            ACKT = 0;
+                            NACK = 0;
+                            if(~LAD_Sel) V1 = Mem_Addr;
+                            S1 = 3'd7;
+                            repeat (8)  begin
+                                        @(posedge clk)  SCL = ~SCL;
+                                                        SDAreg = Y1;
+                                        @(negedge clk)  SCL = ~SCL;
+                                                        S1--;
+                            end
+                            // @(negedge clk) SCL = ~SCL;
+                            @(posedge clk)
+                            SDAreg = '1;
+                            SDF_Done = 1;
+                            LAD_Sel = 0;
             end
             
-            State[SDFACK_B]: begin
+            State[SDFACK_B]: begin  // 32
+                            SDF_Done = 0;
+                            SCL = ~SCL;
+                            if (~SDA) begin
+                                ACKT = 1;
+                                @(negedge clk) SCL = ~SCL;
+                            end
+                            else begin
+                                NACK = 1;
+                                @(negedge clk) SCL = ~SCL;
+                            end
+                            if(R_W_en) begin SDAreg = 1; #2 SCL = ~SCL; read = 1; end
+            end
+
+            State[LAD_B]: begin     // 64
+                            ACKT = 0; NACK = 0;
+                            count_w--;
+                            if(count_w == 2)V1 = Sum1;
+                            if(count_w == 1)V1 = Sum2;
+                            if(count_w == 0)V1 = 'x;
+                            S1 = 3'd7;
+                            LAD_Sel = 1;
+            end
+
+            State[SAFR_B]: begin    // 128
+                            V1 = {Slave_Addr, read};
+                            S1 = 3'd7;
+                            // if(~R_W_en)     count_r = 2;
+                            // else if(R_W_en) count_w = 1;
+                            // SDAreg = Y1;
+                            // SCL = ~SCL;
+                            // @(negedge clk) SCL = ~SCL;
+                            repeat (8)  begin
+                                        @(posedge clk)  SCL = ~SCL;
+                                                        SDAreg = Y1;
+                                        @(negedge clk)  SCL = ~SCL;
+                                                        S1--;
+                            end
+                            @(posedge clk)
+                            SDAreg = '1;
+                            SAFR_Done = 1;
+                            // SAFW_Done = 1;      // Used to indicate the State completion
+
+            end
+
+            State[SAFRACK_B]: begin // 256
                 
             end
 
-            State[LAD_B]: begin
+            State[RDF_B]: begin     // 512
                 
             end
 
-            State[SAFR_B]: begin
+            State[RDFACK_B]: begin  // 1024
                 
             end
 
-            State[SAFRACK_B]: begin
+            State[RAD_B]: begin     // 2048
                 
             end
 
-            State[RDF_B]: begin
-                
-            end
-
-            State[RDFACK_B]: begin
-                
-            end
-
-            State[RAD_B]: begin
-                
-            end
-
-            State[STOP_B]: begin
+            State[STOP_B]: begin    // 4096
                 
             end
 

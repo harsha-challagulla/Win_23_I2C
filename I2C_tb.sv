@@ -25,17 +25,21 @@ module top2;
     end
 
     initial begin
-        Sum1 = 8'hAA;   
-        Sum2 = 8'h55;
-        Mem_Addr = 8'h00;
+        Sum1 = 8'h77;   
+        Sum2 = 8'h22;
+        Mem_Addr = 8'h55;
+        R_W_en = 0;
         Slave_Addr = 7'h55;
         reset_n = 0;
         clk = 0;
 
         @(negedge clk) reset_n = 1;
         Master_en = 1;
-        repeat(15) @(posedge clk) begin
-        if(DUT.SAFW_Done) DUT.SDAreg = 0;
+        repeat(50) @(posedge clk) begin
+        @(negedge clk) if(DUT.SAFW_Done) DUT.SDAreg = 0;    // Slave is acking the SAF
+        @(negedge clk) if(DUT.SDF_Done) DUT.SDAreg = 0;    // Slave is acking the SDF
+        // @(negedge clk) if(DUT.SAFW_Done) DUT.SDAreg = 0;    // Slave is acking the SAF
+
         end
         @(posedge clk) $finish;
     end

@@ -13,6 +13,6 @@ module ALU(
   assign FourB = B << 2;   // Left shift B by 1 bit to multiply it by 4
   
   assign Cext = Cin;
-  assign {Cout, Sum} = TwoA + FourB + Cext;
+  assign {Cout, Sum} = TwoA + FourB + Cext; // 2A + 4B
   
 endmodule

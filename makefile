@@ -10,6 +10,12 @@ snd:
 	vlog $(VLOG_FLAGS) ALU.sv I2C.sv I2C_tb.sv
 	vsim -c -voptargs=+acc=npr top2 -do "vcd file I2C_tb.vcd; vcd add -r top2/*; run -all; quit"
 
+snd1: 
+	rm -rf transcript work *.vcd
+	vlog $(VLOG_FLAGS) I2C.sv I2C_tb.sv
+	vsim -c -voptargs=+acc=npr top2 -do "vcd file I2C_tb.vcd; vcd add -r top2/*; run -all; quit"
+
+
 trd: 
 	rm -rf transcript work *.vcd
 	vlog $(VLOG_FLAGS) ALU.sv I2C.sv Mem_Contr.sv Mem_Contr_tb.sv

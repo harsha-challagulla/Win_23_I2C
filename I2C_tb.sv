@@ -35,12 +35,30 @@ module top2;
 
         @(negedge clk) reset_n = 1;
         Master_en = 1;
-        repeat(50) @(posedge clk) begin
+        repeat(27) @(posedge clk) begin
         @(negedge clk) if(DUT.SAFW_Done) DUT.SDAreg = 0;    // Slave is acking the SAF
         @(negedge clk) if(DUT.SDF_Done) DUT.SDAreg = 0;    // Slave is acking the SDF
         // @(negedge clk) if(DUT.SAFW_Done) DUT.SDAreg = 0;    // Slave is acking the SAF
-
         end
+        @(posedge clk) R_W_en = 1;
+        repeat(50) @(posedge clk) begin
+            if(DUT.SAFW_Done) DUT.SDAreg = 0;
+            if(DUT.SDF_Done) DUT.SDAreg = 0;
+            if(DUT.SAFR_Done) DUT.SDAreg = 0;
+        // end
+        if(DUT.RDF_Done1) begin
+            DUT.SDAreg = 1;
+            @(posedge clk) DUT.SDAreg = 0;
+            @(posedge clk) DUT.SDAreg = 1;
+            @(posedge clk) DUT.SDAreg = 0;
+            @(posedge clk) DUT.SDAreg = 1;
+            @(posedge clk) DUT.SDAreg = 0;
+            @(posedge clk) DUT.SDAreg = 1;
+            @(posedge clk) DUT.SDAreg = 0;
+            @(negedge clk) DUT.SDAreg = 1;
+        end
+    end
+
         @(posedge clk) $finish;
     end
 

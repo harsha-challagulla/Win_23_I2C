@@ -1,0 +1,61 @@
+[*]
+[*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
+[*] Fri Jun 02 20:14:06 2023
+[*]
+[dumpfile] "B:\Documents\SV\New\Assignment\Win_23_I2C\I2C_tb.vcd"
+[dumpfile_mtime] "Fri Jun 02 20:13:44 2023"
+[dumpfile_size] 3595
+[savefile] "B:\Documents\SV\New\Assignment\Win_23_I2C\gtkwave_D1.gtkw"
+[timestart] 0
+[size] 1920 1129
+[pos] -1 -1
+*-5.107375 115 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] top2.
+[sst_width] 42
+[signals_width] 200
+[sst_expanded] 0
+[sst_vpaned_height] 339
+@28
+top2.DUT.clk
+top2.DUT.reset_n
+@200
+-
+@28
+top2.DUT.SDA
+top2.DUT.SDAreg
+top2.DUT.SCL
+@200
+-
+@22
+#{top2.DUT.Sum1[7:0]} top2.DUT.Sum1[7] top2.DUT.Sum1[6] top2.DUT.Sum1[5] top2.DUT.Sum1[4] top2.DUT.Sum1[3] top2.DUT.Sum1[2] top2.DUT.Sum1[1] top2.DUT.Sum1[0]
+#{top2.DUT.Sum2[7:0]} top2.DUT.Sum2[7] top2.DUT.Sum2[6] top2.DUT.Sum2[5] top2.DUT.Sum2[4] top2.DUT.Sum2[3] top2.DUT.Sum2[2] top2.DUT.Sum2[1] top2.DUT.Sum2[0]
+#{top2.DUT.Slave_Addr[6:0]} top2.DUT.Slave_Addr[6] top2.DUT.Slave_Addr[5] top2.DUT.Slave_Addr[4] top2.DUT.Slave_Addr[3] top2.DUT.Slave_Addr[2] top2.DUT.Slave_Addr[1] top2.DUT.Slave_Addr[0]
+@28
+top2.DUT.R_W_en
+top2.DUT.Master_en
+@22
+#{top2.DUT.Mem_Addr[7:0]} top2.DUT.Mem_Addr[7] top2.DUT.Mem_Addr[6] top2.DUT.Mem_Addr[5] top2.DUT.Mem_Addr[4] top2.DUT.Mem_Addr[3] top2.DUT.Mem_Addr[2] top2.DUT.Mem_Addr[1] top2.DUT.Mem_Addr[0]
+@200
+-
+@28
+top2.DUT.read
+@24
+top2.DUT.State[12:0]
+top2.DUT.Next[12:0]
+@28
+top2.DUT.ACKT
+top2.DUT.ACKM
+top2.DUT.NACK
+@200
+-
+@22
+top2.DUT.V1[7:0]
+@25
+top2.DUT.S1[2:0]
+@28
+top2.DUT.Y1
+@420
+top2.DUT.count_r
+top2.DUT.count_w
+[pattern_trace] 1
+[pattern_trace] 0

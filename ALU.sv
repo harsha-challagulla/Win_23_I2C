@@ -1,8 +1,8 @@
 module ALU(
   input logic [7:0] A, B,
   input logic Cin,
-  output logic [7:0] Sum,
-  output logic [2:0] Cout
+  output logic [7:0] Sum1,
+  output logic [7:0] Sum2
 );
   
   logic [8:0] TwoA;
@@ -13,6 +13,6 @@ module ALU(
   assign FourB = B << 2;   // Left shift B by 1 bit to multiply it by 4
   
   assign Cext = Cin;
-  assign {Cout, Sum} = TwoA + FourB + Cext; // 2A + 4B
+  assign {Sum2, Sum1} = TwoA + FourB + Cext; // 2A + 4B
   
 endmodule
